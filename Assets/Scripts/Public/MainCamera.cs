@@ -23,9 +23,9 @@ public class MainCamera : MonoBehaviour
         
     }
 
-    void LateUpdate()
-    {
-        //transform.Translate(player.transform.position)
-        transform.position = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
-    }
+    //void LateUpdate()
+    //{
+    //    //transform.Translate(player.transform.position)
+    //    transform.position = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
+    //}
 }

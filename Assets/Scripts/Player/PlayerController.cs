@@ -33,6 +33,11 @@ public class PlayerController : MonoBehaviour
     private float dodgeRollSpeed = 10f;
     private float dodgeRollVelocityX = 0;
 
+    public Transform leftPosition;
+    public Transform rightPosition;
+    [HideInInspector]
+    public Transform attackEffectPosition;
+    public bool IsFacingLeft { get { return character2D.spriteFaceLeft; } }
 
     protected readonly int hashHorizontalSpeed = Animator.StringToHash("horizontalSpeed");
     protected readonly int hashVerticalSpeed = Animator.StringToHash("verticalSpeed");
@@ -59,13 +64,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
 
-
-#if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.F12))
-        {
-            debugMenuIsOpen = !debugMenuIsOpen;
-        }
-#endif
     }
 
     private void FixedUpdate()
@@ -85,7 +83,7 @@ public class PlayerController : MonoBehaviour
     }
     public void FacingUpdate()
     {
-        if ((moveVector.x < 0 && !character2D.spriteFaceLeft) || (moveVector.x > 0 && character2D.spriteFaceLeft))
+        if ((moveVector.x < 0 && !character2D.spriteFaceLeft || moveVector.x > 0 && character2D.spriteFaceLeft))
         {
             character2D.Flip();
         }
@@ -158,7 +156,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetButtonDown("Attack"))
         {
-            Debug.Log("Attack");
+            ResetMoveVector();
             animator.SetTrigger(hashAttack);
         }
         if (Input.GetButtonDown("Skill"))
@@ -201,14 +199,19 @@ public class PlayerController : MonoBehaviour
 
 #if UNITY_EDITOR
 
-    bool debugMenuIsOpen = true;
+    float height;
+    void OnEnable()
+    {
+        height = Global.debugUIStartY;
+        Global.debugUIStartY += 20;
+    }
     void OnGUI()
     {
-        if (debugMenuIsOpen)
+        if (Global.isDebugMenuOpen)
         {
-            GUILayout.BeginArea(new Rect(30, 400, 200, 400));
+            GUILayout.BeginArea(new Rect(Global.debugUIStartX, height, 200, 100));
             GUILayout.Label("MoveVector: " + moveVector.ToString());
-            
+
             GUILayout.EndArea();
 
         }
