@@ -161,7 +161,6 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetButtonDown("Skill"))
         {
-            Debug.Log("Skill");
             animator.SetTrigger(hashUsingSkill);
             if (Input.GetAxis("Horizontal") > 0)
             {
@@ -195,6 +194,11 @@ public class PlayerController : MonoBehaviour
     public void Respawn()
     {
 
+    }
+
+    public void OnAttackHit()
+    {
+        Debug.Log("AttackHit");
     }
 
 #if UNITY_EDITOR

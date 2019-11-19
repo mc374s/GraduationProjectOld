@@ -1,7 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 
+
+[DisallowMultipleComponent]
 public class SingleAnimation : MonoBehaviour
 {
     
@@ -18,10 +21,10 @@ public class SingleAnimation : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        // Destory on hitted
-    }
+    //void Update()
+    //{
+    //    // Destory on hitted
+    //}
 
     public void Play()
     {

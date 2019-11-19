@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f5ebf0cb45896640b4c0bdebca23273, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 1
+  damage: 15
   offset: {x: -0.020122528, y: -3.056058}
   size: {x: 9.369436, y: 10.3337}
   offsetBasedOnSpriteFacing: 1
@@ -138,7 +138,7 @@ MonoBehaviour:
   ignoreInvincibility: 0
   hittableLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   OnDamageableHit:
     m_PersistentCalls:
       m_Calls: []

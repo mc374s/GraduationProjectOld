@@ -122,14 +122,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3092161727128022215}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f5ebf0cb45896640b4c0bdebca23273, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 1
-  offset: {x: -0.020122528, y: -3.056058}
-  size: {x: 9.369436, y: 10.3337}
+  damage: 17
+  offset: {x: 0.66395617, y: -1.4833622}
+  size: {x: 7.2593584, y: 10.996872}
   offsetBasedOnSpriteFacing: 1
   spriteRenderer: {fileID: 0}
   canHitTriggers: 0
@@ -138,7 +138,7 @@ MonoBehaviour:
   ignoreInvincibility: 0
   hittableLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   OnDamageableHit:
     m_PersistentCalls:
       m_Calls: []

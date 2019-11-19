@@ -148,7 +148,6 @@ public class Character2D : MonoBehaviour
         if (Global.isDebugMenuOpen)
         {
             GUILayout.BeginArea(new Rect(Global.debugUIStartX, height, 200, 200));
-
             //GUILayout.BeginVertical("box");
             GUILayout.Label("currentPosition: " + currentPosition);
             GUILayout.Label("Raycast hit Count: " + count);
