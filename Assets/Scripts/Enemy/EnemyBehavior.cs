@@ -19,6 +19,15 @@ public class EnemyBehavior : MonoBehaviour
         
     }
 
+    public void OnHurt(Damager damager, Damageable damageable)
+    {
+        Debug.Log("Damager: " + damager.name + ", HP: " + damageable.CurrentHealth);
+    }
+    public void OnHurt()
+    {
+        Debug.Log("EnemyName: " + gameObject.name);
+    }
+
 #if UNITY_EDITOR
     void OnGUI()
     {
@@ -26,20 +35,20 @@ public class EnemyBehavior : MonoBehaviour
     }
     private void OnDrawGizmosSelected()
     {
-        bool spriteFaceLeft = true;
-        float viewFov = 300;
-        float viewDirection = 0;
-        float viewDistance = 10;
-        //draw the cone of view
-        Vector3 forward = spriteFaceLeft ? Vector2.left : Vector2.right;
-        forward = Quaternion.Euler(0, 0, spriteFaceLeft ? -viewDirection : viewDirection) * forward;
+        //bool spriteFaceLeft = true;
+        //float viewFov = 300;
+        //float viewDirection = 0;
+        //float viewDistance = 10;
+        ////draw the cone of view
+        //Vector3 forward = spriteFaceLeft ? Vector2.left : Vector2.right;
+        //forward = Quaternion.Euler(0, 0, spriteFaceLeft ? -viewDirection : viewDirection) * forward;
 
-        if (GetComponent<SpriteRenderer>().flipX) forward.x = -forward.x;
+        //if (GetComponent<SpriteRenderer>().flipX) forward.x = -forward.x;
 
-        Vector3 endpoint = transform.position + (Quaternion.Euler(0, 0, viewFov * 0.5f) * forward);
+        //Vector3 endpoint = transform.position + (Quaternion.Euler(0, 0, viewFov * 0.5f) * forward);
 
-        Handles.color = new Color(0, 1.0f, 0, 0.2f);
-        Handles.DrawSolidArc(transform.position, -Vector3.forward, (endpoint - transform.position).normalized, viewFov, viewDistance);
+        //Handles.color = new Color(0, 1.0f, 0, 0.2f);
+        //Handles.DrawSolidArc(transform.position, -Vector3.forward, (endpoint - transform.position).normalized, viewFov, viewDistance);
 
         //Draw attack range
         //Handles.color = new Color(1.0f, 0, 0, 0.1f);

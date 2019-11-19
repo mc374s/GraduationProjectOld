@@ -90,6 +90,10 @@ public class Damageable : MonoBehaviour
         //We still want the callback that we were hit, but not the damage to be removed from health.
         if (!m_Invulnerable)
         {
+            if (invulnerableAfterDamage)
+            {
+                EnableInvulnerability();
+            }
             m_CurrentHealth -= damager.damage;
             OnHealthSet.Invoke(this);
         }

@@ -55,12 +55,6 @@ public class Character2D : MonoBehaviour
     void Update()
     {
 
-#if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.F12))
-        {
-            debugMenuIsOpen = !debugMenuIsOpen;
-        }
-#endif
     }
 
     void FixedUpdate()
@@ -134,20 +128,27 @@ public class Character2D : MonoBehaviour
             Vector3 rotation = transform.eulerAngles;
             rotation.y += 180;
             transform.eulerAngles = rotation;
+            //Vector3 theScale = transform.localScale;
+            //theScale.x *= -1;
+            //transform.localScale = theScale;
         }
     }
 
 #if UNITY_EDITOR
 
-    bool debugMenuIsOpen = true;
+    float height = 0;
+    void OnEnable()
+    {
+        height = Global.debugUIStartY;
+        Global.debugUIStartY += 100;
+    }
+
     void OnGUI()
     {
-        if (debugMenuIsOpen)
+        if (Global.isDebugMenuOpen)
         {
-            GUILayout.BeginArea(new Rect(30, 30, 200, 400));
-
+            GUILayout.BeginArea(new Rect(Global.debugUIStartX, height, 200, 200));
             //GUILayout.BeginVertical("box");
-            GUILayout.Label("Press F12 to close");
             GUILayout.Label("currentPosition: " + currentPosition);
             GUILayout.Label("Raycast hit Count: " + count);
             GUILayout.Label("IsGrounded: " + IsGrounded);

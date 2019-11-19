@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class LocomotionSMB : StateMachineBehaviour
 {
+    private PlayerController playerController = null;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     //{
@@ -13,7 +14,10 @@ public class LocomotionSMB : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        PlayerController playerController = animator.gameObject.GetComponent<PlayerController>();
+        if (playerController == null)
+        {
+            playerController = animator.gameObject.GetComponent<PlayerController>();
+        }
         playerController.HorizatalMovment();
         playerController.VerticalMovment();
         playerController.FacingUpdate();
@@ -26,7 +30,7 @@ public class LocomotionSMB : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     //{
-    //    
+    //    playerController.ResetMoveVector();
     //}
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

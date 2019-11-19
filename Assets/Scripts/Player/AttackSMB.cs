@@ -2,18 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(PlayerController))]
 public class AttackSMB : StateMachineBehaviour
 {
+    public GameObject attackEffect;
+    private PlayerController playerController = null;
     // OnStateEnter is called before OnStateEnter is called on any state inside this state machine
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.gameObject.GetComponent<PlayerController>().ResetMoveVector();
+        if (playerController == null)
+        {
+            playerController = animator.gameObject.GetComponent<PlayerController>();
+        }
+
+        playerController.ResetMoveVector();
+
+
+        GameObject effectClone = Instantiate(attackEffect, playerController.rightPosition);
+        if (playerController.IsFacingLeft)
+        {
+            effectClone.GetComponent<SpriteRenderer>().flipX = false;
+        }
     }
 
     // OnStateUpdate is called before OnStateUpdate is called on any state inside this state machine
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.gameObject.GetComponent<PlayerController>().Attack();
+        PlayerController playerController = animator.gameObject.GetComponent<PlayerController>();
+        playerController.Attack();
+
+
     }
 
     //OnStateExit is called before OnStateExit is called on any state inside this state machine
@@ -37,7 +55,7 @@ public class AttackSMB : StateMachineBehaviour
     // OnStateMachineEnter is called when entering a state machine via its Entry Node
     //override public void OnStateMachineEnter(Animator animator, int stateMachinePathHash)
     //{
-    //    
+    //    playerController.ResetMoveVector();
     //}
 
     // OnStateMachineExit is called when exiting a state machine via its Exit Node
