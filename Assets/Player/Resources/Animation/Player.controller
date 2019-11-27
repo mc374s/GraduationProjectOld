@@ -1248,7 +1248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e14d4c8a4c8540946830c68c5b979bb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackEffect: {fileID: 3092161727128022215, guid: eb6af09886ef497499d0835887a881d5,
+  attackEffect: {fileID: 7954707875276732880, guid: 0903b0fd8defdcd4681e5be20621285e,
     type: 3}
 --- !u!1101 &-1386258181076622618
 AnimatorStateTransition:

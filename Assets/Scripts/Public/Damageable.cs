@@ -9,6 +9,10 @@ public class Damageable : MonoBehaviour
     { }
 
     [Serializable]
+    public class SkillEnergyEvent : UnityEvent<Damageable>
+    { }
+
+    [Serializable]
     public class DamageEvent : UnityEvent<Damager, Damageable>
     { }
 
@@ -17,25 +21,36 @@ public class Damageable : MonoBehaviour
     { }
 
     public int startingHealth = 5;
+    public int startingSkillEnergy = 10;
     public bool invulnerableAfterDamage = true;
     public float invulnerabilityDuration = 3f;
     public bool disableOnDeath = false;
     [Tooltip("An offset from the obejct position used to set from where the distance to the damager is computed")]
     public Vector2 centreOffset = new Vector2(0f, 1f);
     public HealthEvent OnHealthSet;
+    public SkillEnergyEvent OnSkillEnergySet;
     public DamageEvent OnTakeDamage;
+    public DamageEvent OnExhaust;
     public DamageEvent OnDie;
     public HealEvent OnGainHealth;
+    public HealEvent OnGainSkillEnergy;
 
     protected bool m_Invulnerable;
     protected float m_InulnerabilityTimer;
     protected int m_CurrentHealth;
+    protected int m_CurrentSkillEnergy;
     protected Vector2 m_DamageDirection;
     protected bool m_ResetHealthOnSceneReload;
+    protected bool m_ResetSkillEnergyOnSceneReload;
 
     public int CurrentHealth
     {
         get { return m_CurrentHealth; }
+    }
+
+    public int CurrentSkillEnergy
+    {
+        get { return m_CurrentSkillEnergy; }
     }
 
     void OnEnable()
@@ -43,6 +58,7 @@ public class Damageable : MonoBehaviour
         m_CurrentHealth = startingHealth;
 
         OnHealthSet.Invoke(this);
+        OnSkillEnergySet.Invoke(this);
 
         DisableInvulnerability();
     }
@@ -136,6 +152,42 @@ public class Damageable : MonoBehaviour
         }
 
         OnHealthSet.Invoke(this);
+    }
+    public void GainSkillEnergy(int amount)
+    {
+        m_CurrentSkillEnergy += amount;
+
+        if (m_CurrentSkillEnergy > startingSkillEnergy)
+            m_CurrentSkillEnergy = startingSkillEnergy;
+
+        OnSkillEnergySet.Invoke(this);
+
+        OnGainHealth.Invoke(amount, this);
+    }
+
+    public void LoseSkillEnergy(int amount)
+    {
+        m_CurrentSkillEnergy -= amount;
+
+        if (m_CurrentSkillEnergy < 0)
+            m_CurrentSkillEnergy = 0;
+
+        OnSkillEnergySet.Invoke(this);
+    }
+
+    public void SetSkillEnergy(int amount)
+    {
+        m_CurrentSkillEnergy = amount;
+
+        if (m_CurrentSkillEnergy <= 0)
+        {
+            //OnDie.Invoke(null, this);
+            //m_ResetGuardDurabilityOnSceneReload = true;
+            //EnableInvulnerability();
+            //if (disableOnDeath) gameObject.SetActive(false);
+        }
+
+        OnSkillEnergySet.Invoke(this);
     }
 
 }

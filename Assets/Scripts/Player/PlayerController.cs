@@ -33,6 +33,10 @@ public class PlayerController : MonoBehaviour
     private float dodgeRollSpeed = 10f;
     private float dodgeRollVelocityX = 0;
 
+    [SerializeField]
+    public Damageable playerDamageable;
+    public int forwardSlashEnergy = 10;
+
     public Transform leftPosition;
     public Transform rightPosition;
     [HideInInspector]
@@ -161,24 +165,40 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetButtonDown("Skill"))
         {
-            animator.SetTrigger(hashUsingSkill);
+
             if (Input.GetAxis("Horizontal") > 0)
             {
+                animator.SetTrigger(hashUsingSkill);
                 animator.SetInteger(hashSkillType, 2);
             }
             else if (Input.GetAxis("Vertical") > 0)
             {
+                animator.SetTrigger(hashUsingSkill);
                 animator.SetInteger(hashSkillType, 3);
             }
             else
             {
-                animator.SetInteger(hashSkillType, 1);
+                if (CheckCanSkill(forwardSlashEnergy))
+                {
+                    animator.SetTrigger(hashUsingSkill);
+                    animator.SetInteger(hashSkillType, 1);
+                }
             }
         }
         if (Input.GetButtonDown("Action"))
         {
             Debug.Log("Action");
         }
+    }
+
+    private bool CheckCanSkill(int needSkillPoint)
+    {
+        if (playerDamageable.CurrentSkillEnergy >= needSkillPoint)
+        {
+            playerDamageable.LoseSkillEnergy(needSkillPoint);
+            return true;
+        }
+        else return false;
     }
 
     public void OnHurt()

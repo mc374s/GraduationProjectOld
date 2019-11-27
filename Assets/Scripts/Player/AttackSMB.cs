@@ -18,7 +18,7 @@ public class AttackSMB : StateMachineBehaviour
         playerController.ResetMoveVector();
 
 
-        GameObject effectClone = Instantiate(attackEffect, playerController.rightPosition);
+        GameObject effectClone = Instantiate(attackEffect, playerController.rightPosition.position, playerController.rightPosition.rotation);
         if (playerController.IsFacingLeft)
         {
             effectClone.GetComponent<SpriteRenderer>().flipX = false;
