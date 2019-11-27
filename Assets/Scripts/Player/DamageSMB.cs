@@ -2,35 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LocomotionSMB : StateMachineBehaviour
+public class DamageSMB : StateMachineBehaviour
 {
-    private CharacterController2D CharacterController = null;
+    public GameObject hitEffect;
+    private CharacterController2D characterController = null;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
+    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        if (characterController == null)
+        {
+            characterController = animator.gameObject.GetComponent<CharacterController2D>();
+        }
+        characterController.ResetMoveVector();
+
+        GameObject effectClone = Instantiate(hitEffect, characterController.transform.position + new Vector3(Random.Range(-2, 2), Random.Range(2, 8), 0), Quaternion.Euler(new Vector3(0, 0, Random.Range(0, 360))));
+        if (characterController.IsFacingLeft)
+        {
+            effectClone.GetComponent<SpriteRenderer>().flipX = false;
+        }
+    }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (CharacterController == null)
-        {
-            CharacterController = animator.gameObject.GetComponent<CharacterController2D>();
-        }
-        CharacterController.HorizatalMovment();
-        CharacterController.VerticalMovment();
-        CharacterController.FacingUpdate();
-        CharacterController.Jump();
-        CharacterController.JumpUpdate();
-        CharacterController.Attack();
-        CharacterController.DodgeRoll();
+        characterController.input.Release();
+        characterController.DamageUpdate();
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     //{
-    //    playerController.ResetMoveVector();
+    //    
     //}
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

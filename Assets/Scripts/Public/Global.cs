@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Global : MonoBehaviour
 {
+    static public bool isBattling = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,13 +26,14 @@ public class Global : MonoBehaviour
     private void OnEnable()
     {
         height = debugUIStartY;
-        debugUIStartY += 20;
+        debugUIStartY += 40;
     }
 
     static public bool isDebugMenuOpen = true;
     void OnGUI()
     {
-        isDebugMenuOpen = GUI.Toggle(new Rect(Global.debugUIStartX, height, 100, 20), isDebugMenuOpen, "DebugMeun");
+        isDebugMenuOpen = GUI.Toggle(new Rect(debugUIStartX, height, 100, 20), isDebugMenuOpen, "DebugMeun");
+        isBattling = GUI.Toggle(new Rect(debugUIStartX, height + 20, 100, 20), isBattling, "BattleStart");
     }
 
 #endif
