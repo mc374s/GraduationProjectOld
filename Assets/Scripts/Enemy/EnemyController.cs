@@ -9,6 +9,11 @@ public class EnemyController : CharacterController2D
     protected readonly int hashHorizontalSpeed = Animator.StringToHash("horizontalSpeed");
     protected readonly int hashGrounded = Animator.StringToHash("grounded");
     protected readonly int hashAttack = Animator.StringToHash("attack");
+    protected readonly int hashHurt = Animator.StringToHash("hurt");
+    protected readonly int hashKnockDown = Animator.StringToHash("knockDown");
+    protected readonly int hashDead = Animator.StringToHash("dead");
+
+    public Damageable damageable;
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +36,7 @@ public class EnemyController : CharacterController2D
     {
         character2D.Move(moveVector * Time.fixedDeltaTime);
 
-        animator.SetFloat(hashHorizontalSpeed, character2D.Velocity.y);
+        animator.SetFloat(hashHorizontalSpeed, character2D.Velocity.x);
         //animator.SetFloat(hashVerticalSpeed, character2D.Velocity.y);
         animator.SetBool(hashGrounded, character2D.IsGrounded);
     }
@@ -84,14 +89,36 @@ public class EnemyController : CharacterController2D
             animator.SetTrigger(hashAttack);
         }
     }
-
     public override void OnHurt()
     {
-        //Debug.Log(gameObject.name + " hurt by ");
+        animator.SetTrigger(hashHurt);
     }
-    public void OnHurt(Damager damager)
+    private Damager damagerRecord;
+    public void OnHurt(Damager damager,Damageable damageable)
     {
-        //Debug.Log(damager.name);
+        if (damagerRecord != damager)
+        {
+            animator.SetTrigger(hashHurt);
+            damagerRecord = damager;
+        }
+    }
+    public override void OnKnockDown(/*Damager damager, Damageable damageable*/)
+    {
+        animator.SetBool(hashKnockDown, true);
+    }
+
+    public override void OnDie()
+    {
+        animator.SetTrigger(hashDead);
+        Destroy(gameObject, 2);
+    }
+
+    public override void DamageUpdate()
+    {
+        if (!damageable.IsKnockDown)
+        {
+            animator.SetBool(hashKnockDown, false);
+        }
     }
 
 

@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 
 
@@ -11,6 +10,9 @@ public class SingleAnimation : MonoBehaviour
     public AnimationClip animationClip = null;
 
     private Animator animator;
+
+    //public float delayTime = 0;
+    //private float delayTimer = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +25,16 @@ public class SingleAnimation : MonoBehaviour
     // Update is called once per frame
     //void Update()
     //{
-    //    // Destory on hitted
+    //    if (delayTimer <= delayTime)
+    //    {
+    //        delayTimer += Time.deltaTime;
+    //        if (delayTimer > delayTime)
+    //        {
+    //            Play();
+    //            Destroy(gameObject, animationClip.length);
+    //        }
+
+    //    }
     //}
 
     public void Play()

@@ -40,7 +40,9 @@ public class CharacterController2D : MonoBehaviour
     public virtual void DodgeRollUpdate() { }
     public virtual void ResetMoveVector() { }
     public virtual void Attack() { }
+    public virtual void DamageUpdate() { }
     public virtual void OnHurt() { }
+    public virtual void OnKnockDown() { }
     public virtual void OnDie() { }
     public virtual void Respawn() { }
     public virtual void OnAttackHit() { }

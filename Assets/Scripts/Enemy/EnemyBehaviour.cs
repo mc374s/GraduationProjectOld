@@ -40,15 +40,16 @@ public class EnemyBehaviour : MonoBehaviour
     {
         //enemyController.input.Gain();
         Vector3 dir = target.position - transform.position - offset;
-        dir = new Vector3(dir.x, 0, dir.z);
-        if (Vector3.Angle(Vector3.left, dir) < 90 )
+        //dir = new Vector3(dir.x, 0, dir.z);
+        if (Vector3.Angle(Vector3.left, dir) < 80 )
         {
             enemyController.input.Horizontal = -1;
         }
-        else if (Vector3.Angle(Vector3.left, dir) > 90)
+        else if (Vector3.Angle(Vector3.left, dir) > 100)
         {
             enemyController.input.Horizontal = 1;
         }
+
         if (dir.sqrMagnitude < attackDistance * attackDistance)
         {
             enemyController.input.Horizontal = 0;

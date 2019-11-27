@@ -20,10 +20,13 @@ public class Damageable : MonoBehaviour
     public bool invulnerableAfterDamage = true;
     public float invulnerabilityDuration = 3f;
     public bool disableOnDeath = false;
+    public float knockDownTime = 4f;
+    protected float knockDownTimer;
     [Tooltip("An offset from the obejct position used to set from where the distance to the damager is computed")]
     public Vector2 centreOffset = new Vector2(0f, 1f);
     public HealthEvent OnHealthSet;
     public DamageEvent OnTakeDamage;
+    public DamageEvent OnKnockDown;
     public DamageEvent OnDie;
     public HealEvent OnGainHealth;
 
@@ -38,6 +41,8 @@ public class Damageable : MonoBehaviour
     {
         get { return m_CurrentHealth; }
     }
+
+    public bool IsKnockDown { get; set; }
 
     void OnEnable()
     {
@@ -61,6 +66,14 @@ public class Damageable : MonoBehaviour
             if (m_InulnerabilityTimer <= 0f)
             {
                 m_Invulnerable = false;
+            }
+        }
+        if (IsKnockDown)
+        {
+            knockDownTimer -= Time.deltaTime;
+            if (knockDownTimer <= 0f)
+            {
+                IsKnockDown = false;
             }
         }
     }
@@ -103,7 +116,15 @@ public class Damageable : MonoBehaviour
 
         OnTakeDamage.Invoke(damager, this);
 
-        if (m_CurrentHealth <= 0)
+        if (m_CurrentHealth <= 0 && !IsKnockDown)
+        {
+            OnKnockDown.Invoke(damager, this);
+            m_CurrentHealth = 1;
+            knockDownTimer = knockDownTime;
+            EnableInvulnerability();
+            IsKnockDown = true;
+        }
+        if (m_CurrentHealth <= 0 && IsKnockDown)
         {
             OnDie.Invoke(damager, this);
             m_ResetHealthOnSceneReload = true;
