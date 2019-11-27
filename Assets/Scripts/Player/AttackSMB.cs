@@ -2,24 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerController))]
 public class AttackSMB : StateMachineBehaviour
 {
     public GameObject attackEffect;
-    private PlayerController playerController = null;
+    private CharacterController2D characterController = null;
     // OnStateEnter is called before OnStateEnter is called on any state inside this state machine
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (playerController == null)
+        if (characterController == null)
         {
-            playerController = animator.gameObject.GetComponent<PlayerController>();
+            characterController = animator.gameObject.GetComponent<CharacterController2D>();
         }
+        characterController.ResetMoveVector();
 
-        playerController.ResetMoveVector();
+        
 
+        GameObject effectClone = Instantiate(attackEffect, characterController.rightPoint.position, characterController.rightPoint.rotation);
 
-        GameObject effectClone = Instantiate(attackEffect, playerController.rightPosition.position, playerController.rightPosition.rotation);
-        if (playerController.IsFacingLeft)
+        if (characterController.IsFacingLeft)
         {
             effectClone.GetComponent<SpriteRenderer>().flipX = false;
         }
@@ -28,10 +28,7 @@ public class AttackSMB : StateMachineBehaviour
     // OnStateUpdate is called before OnStateUpdate is called on any state inside this state machine
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        PlayerController playerController = animator.gameObject.GetComponent<PlayerController>();
-        playerController.Attack();
-
-
+        characterController.Attack();
     }
 
     //OnStateExit is called before OnStateExit is called on any state inside this state machine
