@@ -2,42 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(Character2D))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : CharacterController2D
 {
-    private Animator animator;
-    private Character2D character2D;
-
-    private Vector2 moveVector;
-    public Vector2 MoveVector { get { return moveVector; } set { moveVector = value; } }
-
-    [SerializeField]
-    private float gravity = -30;
-    [SerializeField]
-    private float horzontalSpeed = 10;
-
-    [SerializeField]
-    private float jumpHeight = 20;
     [SerializeField]
     private float jumpHoldIncrement = 2;
-    [SerializeField]
-    private int jumpCounterMax = 2;
     [SerializeField]
     private float jumpTime = 0.35f;
     private float jumpTimer = 0;
     private bool isJumping = false;
-    private int jumpCounter = 0;
 
     [SerializeField]
     private float dodgeRollSpeed = 10f;
     private float dodgeRollVelocityX = 0;
-
-    public Transform leftPosition;
-    public Transform rightPosition;
-    [HideInInspector]
-    public Transform attackEffectPosition;
-    public bool IsFacingLeft { get { return character2D.spriteFaceLeft; } }
 
     protected readonly int hashHorizontalSpeed = Animator.StringToHash("horizontalSpeed");
     protected readonly int hashVerticalSpeed = Animator.StringToHash("verticalSpeed");
@@ -51,7 +27,6 @@ public class PlayerController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         character2D = GetComponent<Character2D>();
-
     }
 
     // Start is called before the first frame update
@@ -63,7 +38,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        input.Gain();
     }
 
     private void FixedUpdate()
@@ -76,12 +51,12 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    public void HorizatalMovment()
+    public override void HorizatalMovment()
     {
-        moveVector.x = Input.GetAxis("Horizontal") * horzontalSpeed;
+        moveVector.x = input.Horizontal * horzontalSpeed;
 
     }
-    public void FacingUpdate()
+    public override void FacingUpdate()
     {
         if ((moveVector.x < 0 && !character2D.spriteFaceLeft || moveVector.x > 0 && character2D.spriteFaceLeft))
         {
@@ -89,8 +64,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-    public void VerticalMovment()
+    public override void VerticalMovment()
     {
         moveVector.y += gravity * Time.deltaTime;
         if (character2D.IsGrounded && moveVector.y < 0)
@@ -99,13 +73,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void Jump()
+    public override void Jump()
     {
         if (character2D.IsGrounded)
         {
             jumpCounter = 0;
         }
-        if (Input.GetButtonDown("Jump") && ++jumpCounter < jumpCounterMax)
+        if (input.Jump.Down && ++jumpCounter < jumpCounterMax)
         {
             isJumping = true;
             jumpTimer = jumpTime;
@@ -113,9 +87,9 @@ public class PlayerController : MonoBehaviour
             moveVector.y = Mathf.Sqrt(-2f * gravity * jumpHeight);
         }
     }
-    public void JumpUpdate()
+    public override void JumpUpdate()
     {
-        if (Input.GetButton("Jump") && isJumping)
+        if (input.Jump.Held && isJumping)
         {
             if (jumpTimer > 0)
             {
@@ -127,46 +101,54 @@ public class PlayerController : MonoBehaviour
                 isJumping = false;
             }
         }
-        if (Input.GetButtonUp("Jump"))
+        if (input.Jump.Up)
         {
             jumpTimer = 0;
             isJumping = false;
         }
     }
 
-    public void DodgeRoll()
+    public override void DodgeRoll()
     {
-        if (Input.GetButtonDown("Roll"))
+        if (input.Roll.Down)
         {
             dodgeRollVelocityX = character2D.spriteFaceLeft ? -dodgeRollSpeed : dodgeRollSpeed;
             animator.SetTrigger(hashDodgeRoll);
         }
     }
-    public void DodgeRollUpdate()
+    public override void DodgeRollUpdate()
     {
         moveVector.x = dodgeRollVelocityX;
     }
+    public override void InvulnerableOn()
+    {
+        GetComponent<Collider2D>().enabled = false;
+    }
+    public override void InvulnerableOff()
+    {
+        GetComponent<Collider2D>().enabled = true;
+    }
 
-    public void ResetMoveVector()
+    public override void ResetMoveVector()
     {
         moveVector = Vector2.zero;
     }
 
-    public void Attack()
+    public override void Attack()
     {
-        if (Input.GetButtonDown("Attack"))
+        if (input.Attack.Down)
         {
             ResetMoveVector();
             animator.SetTrigger(hashAttack);
         }
-        if (Input.GetButtonDown("Skill"))
+        if (input.Skill.Down)
         {
             animator.SetTrigger(hashUsingSkill);
-            if (Input.GetAxis("Horizontal") > 0)
+            if (input.Horizontal > 0)
             {
                 animator.SetInteger(hashSkillType, 2);
             }
-            else if (Input.GetAxis("Vertical") > 0)
+            else if (input.Vertical > 0)
             {
                 animator.SetInteger(hashSkillType, 3);
             }
@@ -175,28 +157,28 @@ public class PlayerController : MonoBehaviour
                 animator.SetInteger(hashSkillType, 1);
             }
         }
-        if (Input.GetButtonDown("Action"))
+        if (input.Action.Down)
         {
             Debug.Log("Action");
         }
     }
 
-    public void OnHurt()
+    public void OnHurt(Damager damager, Damageable damageable)
+    {
+        //Debug.Log(gameObject.name + " hurt by " + damager.name);
+    }
+
+    public override void OnDie()
     {
 
     }
 
-    public void OnDie()
+    public override void Respawn()
     {
 
     }
 
-    public void Respawn()
-    {
-
-    }
-
-    public void OnAttackHit()
+    public override void OnAttackHit()
     {
         Debug.Log("AttackHit");
     }
@@ -228,8 +210,4 @@ public class PlayerController : MonoBehaviour
     }
 
 #endif
-
-
-
-
 }
